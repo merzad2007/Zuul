@@ -23,6 +23,9 @@ class Game
 		Room lab = new Room("in a computing lab");
 		Room office = new Room("in the computing admin office");
 
+
+	
+
 		// Initialise room exits
 		outside.AddExit("east", theatre);
 		outside.AddExit("south", lab);
@@ -99,15 +102,23 @@ class Game
 			case "quit":
 				wantToQuit = true;
 				break;
+				case "look":
+				 Look();
+				break;
 		}
 
 		return wantToQuit;
 	}
 
+
+
 	// ######################################
 	// implementations of user commands:
 	// ######################################
-	
+	private void Look()
+	{
+		Console.WriteLine(currentRoom.GetLongDescription());
+	}
 	// Print out some help information.
 	// Here we print the mission and a list of the command words.
 	private void PrintHelp()
