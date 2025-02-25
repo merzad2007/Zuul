@@ -22,6 +22,7 @@ class Game
 		Room pub = new Room("in the campus pub");
 		Room lab = new Room("in a computing lab");
 		Room office = new Room("in the computing admin office");
+		Room balkon = new Room ("in the balkon");
 
 
 	
@@ -39,6 +40,9 @@ class Game
 		lab.AddExit("east", office);
 
 		office.AddExit("west", lab);
+		office.AddExit("up",balkon);
+
+		balkon.AddExit("down",office);
 
 		// Create your Items here
 		// ...
