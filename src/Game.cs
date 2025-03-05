@@ -45,10 +45,11 @@ class Game
 
 		balkon.AddExit("down",office);
 
-		// Create your Items here
-		// ...
+		// Create your Items her
+		Item knife = new Item(5,"not sord");
+		Item pistol = new Item ( 3, "headshot");
 		// And add them to the Rooms
-		// ...
+		
 
 		// Start game outside
 		player.CurrentRoom = outside;
