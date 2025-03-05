@@ -58,12 +58,18 @@ class Game
 	public void Play()
 	{
 		PrintWelcome();
+		
 
 		// Enter the main command loop. Here we repeatedly read commands and
 		// execute them until the player wants to quit.
 		bool finished = false;
 		while (!finished)
 		{
+			 if (!player.IsAlive())
+            {
+                Console.WriteLine("You have lost all your health. Game over!");
+                break;
+            }
 			Command command = parser.GetCommand();
 			finished = ProcessCommand(command);
 		}
@@ -110,6 +116,9 @@ class Game
 				case "look":
 				 Look();
 				break;
+				case "status":
+				 PrintStatus();
+				break;
 		}
 
 		return wantToQuit;
@@ -124,6 +133,14 @@ class Game
 	{
 		Console.WriteLine(player.CurrentRoom.GetLongDescription());
 	}
+
+
+	private void PrintStatus()
+	{
+		Console.WriteLine("Your health is: " + player.GetHealth);
+		Console.WriteLine(player.CurrentRoom.GetLongDescription());
+	}
+
 	// Print out some help information.
 	// Here we print the mission and a list of the command words.
 	private void PrintHelp()
@@ -135,28 +152,30 @@ class Game
 		parser.PrintValidCommands();
 	}
 
+	
+	
+
 	// Try to go to one direction. If there is an exit, enter the new
 	// room, otherwise print an error message.
 	private void GoRoom(Command command)
 	{
 		if(!command.HasSecondWord())
-		{
-			// if there is no second word, we don't know where to go...
-			Console.WriteLine("Go where?");
-			return;
-		}
+		 {
+            Console.WriteLine("Go where?");
+            return;
+        }
 
-		string direction = command.SecondWord;
+        string direction = command.SecondWord;
+        Room nextRoom = player.CurrentRoom.GetExit(direction);
+        if (nextRoom == null)
+        {
+            Console.WriteLine("There is no door to " + direction + "!");
+            return;
+        }
 
-		// Try to go to the next room.
-		Room nextRoom = player.CurrentRoom.GetExit(direction);
-		if (nextRoom == null)
-		{
-			Console.WriteLine("There is no door to "+direction+"!");
-			return;
-		}
-
-		player.CurrentRoom = nextRoom;
-		Console.WriteLine(player.CurrentRoom.GetLongDescription());
-	}
+        player.CurrentRoom = nextRoom;
+        player.Damage(10); // Reduce health by 10 per move
+        Console.WriteLine(player.CurrentRoom.GetLongDescription());
+        Console.WriteLine("Your health is now: " + player.GetHealth);
+    }
 }
